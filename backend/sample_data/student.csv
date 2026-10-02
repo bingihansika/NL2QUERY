@@ -1,0 +1,11 @@
+student_id,first_name,last_name,gender,dob,department,year_of_study,cgpa,email,phone_number
+301,Aarav,Sharma,Male,2002-04-12,CSE,4,8.9,aarav.sharma@example.com,9876543210
+302,Ananya,Iyer,Female,2002-08-25,ECE,4,9.2,ananya.iyer@example.com,9876543211
+303,Rohan,Verma,Male,2002-11-05,CSE,4,8.1,rohan.verma@example.com,9876543212
+304,Sneha,Kulkarni,Female,2003-01-18,IT,4,7.8,sneha.kulkarni@example.com,9876543213
+305,Aditya,Deshmukh,Male,2002-06-30,EEE,4,7.5,aditya.d@example.com,9876543214
+306,Diya,Srinivasan,Female,2002-03-14,CSE,4,9.6,diya.s@example.com,9876543215
+307,Karthik,Nair,Male,2002-09-09,IT,4,8.4,karthik.n@example.com,9876543216
+308,Pooja,Joshi,Female,2002-12-22,MECH,4,7.2,pooja.j@example.com,9876543217
+309,Kabir,Mehta,Male,2002-05-19,CSE,4,9.1,kabir.m@example.com,9876543218
+310,Miller,Scott,Male,2002-07-07,CSE,4,8.1,millerscott@garcia.biz,9876543219

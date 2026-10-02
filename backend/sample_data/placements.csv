@@ -1,0 +1,11 @@
+placement_id,student_id,company_name,job_role,salary_package,placement_date,offer_status
+201,301,Microsoft,Software Engineer,24.50,2024-10-15,Accepted
+202,302,Amazon,SDE-1,22.00,2024-11-01,Accepted
+203,303,Accenture,Data Analyst,12.50,2024-12-05,Accepted
+204,304,TCS,System Engineer,8.50,2024-12-10,Pending
+205,305,Wipro,Project Engineer,7.80,2024-12-15,Accepted
+206,306,Google,Cloud Associate,28.00,2024-09-20,Accepted
+207,307,Infosys,Specialist Programmer,9.50,2024-11-25,Accepted
+208,308,Cognizant,Programmer Analyst,6.50,2024-12-20,Accepted
+209,309,Microsoft,Data Engineer,25.00,2024-10-18,Accepted
+210,310,Amazon,Software Engineer,24.14,2024-11-01,Pending

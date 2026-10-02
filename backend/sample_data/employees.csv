@@ -1,0 +1,11 @@
+employee_id,name,department,salary,experience,gender,join_date
+101,Ravi Kumar,IT,70000,3,Male,2021-05-10
+102,Anu Sharma,HR,60000,2,Female,2022-01-15
+103,Kiran Patel,IT,80000,5,Male,2019-11-20
+104,Sita Verma,Finance,65000,4,Female,2020-03-12
+105,Arjun Singh,IT,75000,6,Male,2018-08-01
+106,Priya Nair,Marketing,58000,2,Female,2022-06-18
+107,Rajesh Gupta,Finance,72000,5,Male,2019-04-22
+108,Neha Joshi,HR,63000,3,Female,2021-09-05
+109,Vikram Reddy,IT,90000,8,Male,2016-02-14
+110,Meena Rao,Marketing,61000,3,Female,2021-11-30
