@@ -40,7 +40,7 @@ const getDatasetSuggestions = (schemaData, uploadedFiles) => {
       "List all placement records with accepted offer status",
       "Count total placements grouped by offer status"
     ];
-    if (tables.length > 1 || colNames.some(c => c.includes('student'))) {
+    if (tables.length > 1) {
       list[3] = "Show student details joined with placement records";
     }
     return list;
@@ -238,12 +238,12 @@ export const ChatView = () => {
           <input
             type="text"
             className="input-field"
-            placeholder={isDataReady ? "Ask a question about your data..." : "Upload files to start querying..."}
+            placeholder={isReadyToQuery ? "Ask a question about your data..." : uploadedFiles.length > 0 ? "Select database engine to start querying..." : "Upload dataset files to start querying..."}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            disabled={loading || !isDataReady}
+            disabled={loading || !isReadyToQuery}
           />
-          <button type="submit" className="btn-send" disabled={loading || !inputText.trim() || !isDataReady}>
+          <button type="submit" className="btn-send" disabled={loading || !inputText.trim() || !isReadyToQuery}>
             {loading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
           </button>
         </form>

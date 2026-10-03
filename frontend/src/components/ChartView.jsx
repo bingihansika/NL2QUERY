@@ -23,15 +23,45 @@ export const ChartView = ({ visualization, columns = [], rows = [] }) => {
   const [xAxisKey, setXAxisKey] = useState('');
   const [yAxisKey, setYAxisKey] = useState('');
 
+  // Find columns that contain numeric data in rows
+  const numericColumns = columns.filter((col, idx) => {
+    return rows.some(r => {
+      const val = r[idx];
+      if (typeof val === 'number') return true;
+      if (typeof val === 'string' && val.trim() !== '' && !isNaN(Number(val))) return true;
+      return false;
+    });
+  });
+
+  const textColumns = columns.filter(col => !numericColumns.includes(col));
+
   useEffect(() => {
     if (columns.length > 0) {
-      setXAxisKey(visualization?.x_axis || columns[0]);
-      setYAxisKey(visualization?.y_axis || (columns.length > 1 ? columns[1] : columns[0]));
+      // Pick best numeric column for Y-Axis
+      let defaultY = visualization?.y_axis;
+      if (!defaultY || !numericColumns.includes(defaultY)) {
+        const metricCol = numericColumns.find(c => {
+          const l = c.toLowerCase();
+          return l.includes('cgpa') || l.includes('salary') || l.includes('count') || l.includes('max') || l.includes('avg') || l.includes('package') || l.includes('total') || l.includes('amount') || l.includes('price');
+        });
+        defaultY = metricCol || numericColumns[0] || columns[0];
+      }
+
+      // Pick best label/category column for X-Axis
+      let defaultX = visualization?.x_axis;
+      if (!defaultX || defaultX === defaultY) {
+        const catCol = textColumns.find(c => c !== defaultY) || columns.find(c => c !== defaultY);
+        defaultX = catCol || columns[0];
+      }
+
+      setXAxisKey(defaultX);
+      setYAxisKey(defaultY);
     }
+
     if (visualization?.type) {
       setChartType(visualization.type);
     }
-  }, [visualization, columns]);
+  }, [visualization, columns, rows]);
 
   if (!rows || rows.length === 0 || !columns || columns.length === 0) {
     return (
@@ -41,13 +71,12 @@ export const ChartView = ({ visualization, columns = [], rows = [] }) => {
     );
   }
 
-  // Format raw rows into object array for Recharts
+  // Format raw rows into object array for Recharts with numeric parsing
   const chartData = rows.map((row) => {
     const obj = {};
     columns.forEach((col, idx) => {
       let val = row[idx];
-      // Convert numeric string to float if possible
-      if (typeof val === 'string' && !isNaN(Number(val))) {
+      if (typeof val === 'string' && !isNaN(Number(val)) && val.trim() !== '') {
         val = Number(val);
       }
       obj[col] = val;

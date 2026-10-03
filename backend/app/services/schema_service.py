@@ -9,28 +9,40 @@ class SchemaService:
         tables_schema = []
         all_tables_cols = {}
 
-        # Collect schemas for all active datasets
-        datasets_to_process = []
+        # Collect schemas for all active datasets in session (primary dataset first)
+        datasets_to_process = list(DATASET_STORE.values())
         if dataset_id and dataset_id in DATASET_STORE:
-            datasets_to_process = [DATASET_STORE[dataset_id]]
-        else:
-            datasets_to_process = list(DATASET_STORE.values())
+            primary_ds = DATASET_STORE[dataset_id]
+            datasets_to_process = [primary_ds] + [ds for ds in datasets_to_process if ds["dataset_id"] != dataset_id]
+
+        # Deduplicate datasets by table_name so each table appears once
+        seen_tables = set()
+        unique_datasets = []
+        for ds in datasets_to_process:
+            tname = ds.get("table_name")
+            if tname and tname not in seen_tables:
+                seen_tables.add(tname)
+                unique_datasets.append(ds)
+        datasets_to_process = unique_datasets
 
         db_mgr = get_db_manager(db_type)
 
         schema_text_parts = []
-        active_table_name = ""
+        active_table_name = datasets_to_process[0]["table_name"] if datasets_to_process else ""
 
         for ds in datasets_to_process:
             table_name = ds["table_name"]
-            active_table_name = table_name
             schema_info = db_mgr.get_schema(table_name)
+            columns = schema_info.get("columns", [])
+            if not columns and "columns" in ds:
+                columns = ds["columns"]
 
             formatted_cols = []
             for idx, c in enumerate(columns):
                 c_name = c.get("name", "")
                 is_pk = c.get("primary_key", False)
-                if not is_pk and (c_name.endswith("_id") or c_name == "id" or (idx == 0 and ("id" in c_name or "code" in c_name))):
+                clean_name = c_name.lower().strip()
+                if not is_pk and (clean_name.endswith("_id") or clean_name == "id" or (idx == 0 and ("id" in clean_name or "code" in clean_name or "num" in clean_name))):
                     is_pk = True
                 formatted_cols.append({
                     "name": c_name,

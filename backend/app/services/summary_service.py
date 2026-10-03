@@ -7,33 +7,30 @@ class SummaryService:
         if not rows or not columns:
             return {"type": "table", "x_axis": None, "y_axis": None, "title": "No Data"}
 
-        if len(columns) == 1:
-            return {"type": "table", "x_axis": columns[0], "y_axis": None, "title": f"List of {columns[0]}"}
+        # Identify numeric column for Y-Axis
+        numeric_idx = None
+        for i, col in enumerate(columns):
+            if len(rows) > 0 and isinstance(rows[0][i], (int, float)):
+                numeric_idx = i
+                break
+            elif len(rows) > 0 and isinstance(rows[0][i], str):
+                try:
+                    float(rows[0][i])
+                    numeric_idx = i
+                    break
+                except ValueError:
+                    pass
 
-        x_col = columns[0]
-        y_col = columns[1]
+        if numeric_idx is not None:
+            y_col = columns[numeric_idx]
+            x_col = next((c for i, c in enumerate(columns) if i != numeric_idx), columns[0])
+            chart_type = suggested_type.lower() if suggested_type != "table" else "bar"
+            title = f"{y_col.replace('_', ' ').title()} by {x_col.replace('_', ' ').title()}"
+            return {
+                "type": chart_type,
+                "x_axis": x_col,
+                "y_axis": y_col,
+                "title": title
+            }
 
-        # Check if second column is numeric
-        is_numeric = False
-        try:
-            if len(rows) > 0 and isinstance(rows[0][1], (int, float)):
-                is_numeric = True
-        except Exception:
-            is_numeric = False
-
-        chart_type = suggested_type.lower()
-        if not is_numeric:
-            chart_type = "table"
-
-        # Check for time-based x-axis
-        if is_numeric and any(kw in x_col.lower() for kw in ["date", "time", "year", "month", "day"]):
-            chart_type = "line"
-
-        title = f"{y_col.replace('_', ' ').title()} by {x_col.replace('_', ' ').title()}"
-
-        return {
-            "type": chart_type,
-            "x_axis": x_col,
-            "y_axis": y_col,
-            "title": title
-        }
+        return {"type": "table", "x_axis": columns[0], "y_axis": columns[1] if len(columns) > 1 else columns[0], "title": "Data Table"}

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { uploadFile as uploadFileApi, getSchema as getSchemaApi, executeQuery as executeQueryApi, importDataset as importDatasetApi } from '../services/api';
+import { uploadFile as uploadFileApi, getSchema as getSchemaApi, executeQuery as executeQueryApi, importDataset as importDatasetApi, clearDatasets as clearDatasetsApi } from '../services/api';
 
 const AppContext = createContext();
 
@@ -120,8 +120,13 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  // Requirement 1: Clear everything on "New Chat" to start 100% fresh!
-  const handleNewChat = () => {
+  // Clear everything on "New Chat" to start 100% fresh!
+  const handleNewChat = async () => {
+    try {
+      await clearDatasetsApi();
+    } catch (e) {
+      console.warn("Error clearing datasets:", e);
+    }
     setActiveDataset(null);
     setUploadedFiles([]);
     setSelectedDatabase('');

@@ -33,21 +33,7 @@ async def health_check():
         "version": "1.0.0"
     }
 
-@app.on_event("startup")
-async def preload_sample_datasets():
-    """Auto-load sample datasets on startup if available."""
-    sample_dir = os.path.join(os.path.dirname(__file__), "..", "sample_data")
-    if os.path.exists(sample_dir):
-        for fname in ["placements.csv", "student.csv", "employees.csv"]:
-            fpath = os.path.join(sample_dir, fname)
-            if os.path.exists(fpath):
-                try:
-                    with open(fpath, "rb") as f:
-                        content = f.read()
-                        DatasetService.process_file(content, fname)
-                        print(f"Preloaded sample dataset: {fname}")
-                except Exception as e:
-                    print(f"Sample dataset load warning ({fname}): {e}")
+# No startup preloading: DATASET_STORE starts empty so schemas & joins depend strictly on user uploads
 
 if __name__ == "__main__":
     import uvicorn

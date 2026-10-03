@@ -41,3 +41,8 @@ export const getAnalytics = async (datasetId) => {
   });
   return response.data;
 };
+
+export const clearDatasets = async () => {
+  const response = await axios.post(`${API_BASE}/dataset/clear`);
+  return response.data;
+};

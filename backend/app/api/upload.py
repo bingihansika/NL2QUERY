@@ -32,3 +32,9 @@ async def import_dataset(req: ImportRequest):
         )
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Import error: {str(e)}")
+
+@router.post("/dataset/clear")
+async def clear_datasets():
+    """Clear all session datasets."""
+    DatasetService.clear_all()
+    return {"success": True, "message": "All session datasets cleared."}

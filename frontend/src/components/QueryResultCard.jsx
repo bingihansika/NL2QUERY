@@ -11,6 +11,7 @@ export const QueryResultCard = ({ resultData }) => {
   const {
     query,
     query_type,
+    explanation,
     columns = [],
     rows = [],
     total_records = 0,
@@ -40,10 +41,12 @@ export const QueryResultCard = ({ resultData }) => {
     a.click();
   };
 
+  const bannerText = explanation || summary;
+
   return (
     <div className="query-response-card">
-      {/* Top Natural Language AI Summary Banner matching screenshot 2 & 3 */}
-      {summary && !error && (
+      {/* Top Banner: Explanation of the Natural Language Query before system query */}
+      {bannerText && !error && (
         <div style={{
           background: 'rgba(15, 23, 42, 0.7)',
           border: '1px solid rgba(0, 242, 254, 0.25)',
@@ -53,7 +56,7 @@ export const QueryResultCard = ({ resultData }) => {
           fontSize: '0.92rem',
           lineHeight: '1.6'
         }}>
-          {summary}
+          {bannerText}
         </div>
       )}
 

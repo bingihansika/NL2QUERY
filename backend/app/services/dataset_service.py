@@ -112,3 +112,7 @@ class DatasetService:
         schema_info = db_mgr.get_schema(table_name)
 
         return table_name, schema_info
+
+    @staticmethod
+    def clear_all():
+        DATASET_STORE.clear()
